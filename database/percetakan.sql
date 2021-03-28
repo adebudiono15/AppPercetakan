@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 25 Mar 2021 pada 16.36
+-- Waktu pembuatan: 28 Mar 2021 pada 20.37
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.4.10
 
@@ -134,9 +134,9 @@ CREATE TABLE `logistik` (
 --
 
 INSERT INTO `logistik` (`id`, `kode`, `nama`, `stok`, `kategori_id`, `harga_beli`, `harga_jual`, `created_at`, `updated_at`) VALUES
-(11, 'DPL00001', 'log 1', 100, '3', 3000, 3000, '2021-03-18 17:35:57', '2021-03-22 20:17:36'),
-(12, 'DPL00002', 'log 2', 100, '2', 1000, 0, '2021-03-18 17:36:06', '2021-03-22 20:17:36'),
-(13, 'LDP00003', 'Tes logistik', 1000, '3', 1000, 2000, '2021-03-22 17:51:15', '2021-03-22 17:51:15');
+(11, 'DPL00001', 'log 1', 101, '3', 3000, 3000, '2021-03-18 17:35:57', '2021-03-28 18:18:59'),
+(12, 'DPL00002', 'log 2', 101, '2', 1000, 4000, '2021-03-18 17:36:06', '2021-03-28 18:18:59'),
+(13, 'LDP00003', 'Tes logistik', 101, '3', 1000, 2000, '2021-03-22 17:51:15', '2021-03-28 18:18:59');
 
 -- --------------------------------------------------------
 
@@ -148,8 +148,7 @@ CREATE TABLE `logistik_keluar` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `kode` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `customer_id` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nama_id` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `qty` bigint(20) NOT NULL,
+  `grand_total` bigint(20) DEFAULT NULL,
   `tanggal` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -159,8 +158,34 @@ CREATE TABLE `logistik_keluar` (
 -- Dumping data untuk tabel `logistik_keluar`
 --
 
-INSERT INTO `logistik_keluar` (`id`, `kode`, `customer_id`, `nama_id`, `qty`, `tanggal`, `created_at`, `updated_at`) VALUES
-(3, 'DPLK00001', '1', '12', 40, '2021-03-19', NULL, NULL);
+INSERT INTO `logistik_keluar` (`id`, `kode`, `customer_id`, `grand_total`, `tanggal`, `created_at`, `updated_at`) VALUES
+(6, 'LK00001', '1', 6000, '2021-03-29', '2021-03-28 18:18:59', '2021-03-28 18:18:59');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `logistik_keluar_line`
+--
+
+CREATE TABLE `logistik_keluar_line` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `log_keluar_id` bigint(20) NOT NULL,
+  `nama_id` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `qty` bigint(20) NOT NULL,
+  `harga` bigint(20) NOT NULL,
+  `grand_total` bigint(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `logistik_keluar_line`
+--
+
+INSERT INTO `logistik_keluar_line` (`id`, `log_keluar_id`, `nama_id`, `qty`, `harga`, `grand_total`, `created_at`, `updated_at`) VALUES
+(1, 6, '11', 1, 3000, 3000, '2021-03-28 18:18:59', '2021-03-28 18:18:59'),
+(2, 6, '12', 1, 1000, 1000, '2021-03-28 18:18:59', '2021-03-28 18:18:59'),
+(3, 6, '13', 1, 2000, 2000, '2021-03-28 18:18:59', '2021-03-28 18:18:59');
 
 -- --------------------------------------------------------
 
@@ -249,7 +274,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (12, '2021_03_19_024754_create_po_table', 8),
 (13, '2021_03_19_024806_create_po_line_table', 8),
 (14, '2021_03_22_171043_create_kategori_table', 9),
-(15, '2021_03_23_021116_create_logistik_masuk_line_table', 10);
+(15, '2021_03_23_021116_create_logistik_masuk_line_table', 10),
+(16, '2021_03_29_004929_create_logistik_keluar_line_table', 11);
 
 -- --------------------------------------------------------
 
@@ -401,6 +427,12 @@ ALTER TABLE `logistik_keluar`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `logistik_keluar_line`
+--
+ALTER TABLE `logistik_keluar_line`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `logistik_masuk`
 --
 ALTER TABLE `logistik_masuk`
@@ -487,6 +519,12 @@ ALTER TABLE `logistik`
 -- AUTO_INCREMENT untuk tabel `logistik_keluar`
 --
 ALTER TABLE `logistik_keluar`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT untuk tabel `logistik_keluar_line`
+--
+ALTER TABLE `logistik_keluar_line`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -505,7 +543,7 @@ ALTER TABLE `logistik_masuk_line`
 -- AUTO_INCREMENT untuk tabel `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `po`
