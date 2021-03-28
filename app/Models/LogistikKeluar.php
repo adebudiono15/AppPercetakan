@@ -9,9 +9,9 @@ class LogistikKeluar extends Model
 {
     use HasFactory;
     protected $table="logistik_keluar";
-    protected $fillable=['kode', 'customer_id','nama','tanggal'];
+    protected $fillable=['kode', 'supplier_id','nama','tanggal'];
 
-    public function cutomer()
+    public function customer()
     {
         return $this->belongsTo(Customer::class,'customer_id');
     }
@@ -19,4 +19,8 @@ class LogistikKeluar extends Model
     {
         return $this->belongsTo(Logistik::class,'nama_id');
     }
+    
+    public function lines(){
+        return $this->hasMany(LogistikKeluarLine::class,'log_keluar_id');
+     }
 }

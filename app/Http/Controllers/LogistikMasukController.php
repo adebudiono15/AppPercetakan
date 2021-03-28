@@ -77,7 +77,6 @@ class LogistikMasukController extends Controller
     public function get_logistik_masuk($id)
     {
         $item = Logistik::where('id', $id)->first();
-
         return response()->json([
             'data' => $item
         ]);

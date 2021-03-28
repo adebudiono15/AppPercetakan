@@ -63,6 +63,8 @@ Route::get('{id}/detail-logmasuk', [LogistikMasukController::class, 'detaillogma
 Route::get('/logistik-keluar', [LogistikKeluarController::class, 'index'])->name('logistik-keluar');
 Route::post('/save-logistik-keluar', [LogistikKeluarController::class, 'store'])->name('save-logistik-keluar');
 Route::delete('logistik-keluar/{id}', [LogistikKeluarController::class, 'delete'])->name('hapus-logistik-keluar');
+Route::get('logistikkeluar/ajax/{id}', [LogistikKeluarController::class, 'get_logistik_keluar']);
+Route::get('{id}/detail-logkeluar', [LogistikKeluarController::class, 'detaillogkeluar']);
 // PO
 Route::get('/po', [PoController::class, 'index'])->name('po');
 Route::post('/save-po', [PoController::class, 'store'])->name('save-po');

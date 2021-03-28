@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Logistik Keluar')
+@section('title', 'Logistik Masuk')
 
 @section('content')
     <div class="content">
@@ -24,17 +24,17 @@
                                         <tr>
                                             <th>NO</th>
                                             <th>KODE</th>
-                                            <th>CUSTOMER</th>
+                                            <th>SUPPLIER</th>
                                             <th>GRAND TOTAL</th>
                                             <th class="text-center">AKSI</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($logistikkeluar as $e=>$item)
+                                        @foreach ($logistikmasuk as $e=>$item)
                                         <tr>
                                             <td>{{ $e+1 }}</td>
                                             <td>{{ $item->kode }}</td>
-                                            <td>{{ $item->customer->nama }}</td>
+                                            <td>{{ $item->supplier->nama }}</td>
                                             <td style="text-align: end;">{{ number_format($item->grand_total) }}</td>
                                             <td class="text-center">
                                                
@@ -45,7 +45,7 @@
                                                 </a>
 
                                                     <a class="swal-confirm btn btn-sm btn-danger btn-shadow mt-2 mb-2" data-id="{{ $item->id }}" href="#">DELETE
-                                                        <form action="{{ route('hapus-logistik-keluar', $item->id) }}"
+                                                        <form action="{{ route('hapus-logistik-masuk', $item->id) }}"
                                                                 id="delete{{ $item->id }}" method="post">
                                                                 @csrf
                                                                 @method('delete')
@@ -78,13 +78,13 @@
                     <button type="button" class="close text-white" data-dismiss="modal">×</button>
                 </div>
                 <form class="form form-vertical" method="post" enctype="multipart/form-data"
-                    action="{{ route('save-logistik-keluar') }}">
+                    action="{{ route('save-logistik-masuk') }}">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="kode" @error('kode') class="text-danger" @enderror>KODE TRANSAKSI LOGISTIK KELUAR @error('kode')
+                                    <label for="kode" @error('kode') class="text-danger" @enderror>KODE TRANSAKSI LOGISTIK MASUK @error('kode')
                                         | {{ $message }}
                                         @enderror</label>
                                     <input type="text" class="form-control form-control-sm shadow" value="{{ $kode }}"
@@ -94,12 +94,12 @@
 
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="customer" @error('customer') class="text-danger" @enderror>CUSTOMER @error('customer')
+                                    <label for="supplier" @error('supplier') class="text-danger" @enderror>SUPPLIER @error('supplier')
                                         | {{ $message }}
                                         @enderror</label>
-                                        <select id="customer" name="customer" class="js-states form-control" style="width: 100%">
+                                        <select id="supplier" name="supplier" class="js-states form-control" style="width: 100%">
                                             <option value=""></option>
-                                           @foreach ($customer as $item)
+                                           @foreach ($supplier as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                            @endforeach
                                         </select>
@@ -129,7 +129,7 @@
                                     <label for="logistik" @error('logistik') class="text-danger" @enderror>Pilih Item Untuk Tambah Logistik @error('logistik')
                                         | {{ $message }}
                                         @enderror</label>
-                                   <select id="logistikkeluar" class="js-states form-control" style="width: 100%" name="logistik">
+                                   <select id="logistikmasuk" class="js-states form-control" style="width: 100%" name="logistik">
                                     <option value=""></option>
                                    @foreach ($logistik as $item)
                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -198,17 +198,17 @@
     }
 </script>
 <script>
-     $("#customer").select2({
-        placeholder: "Pilih Customer",
+     $("#supplier").select2({
+        placeholder: "Pilih Supplier",
         allowClear: true
     });
 </script>
 <script>
-    $('#logistikkeluar').select2();
-   $('#logistikkeluar').on('select2:select', function (e) { 
+    $('#logistikmasuk').select2();
+   $('#logistikmasuk').on('select2:select', function (e) { 
        console.log('select event');
                var id = $(this).val();
-               var url = "{{ url('logistikkeluar/ajax') }}"+'/'+id;
+               var url = "{{ url('logistikmasuk/ajax') }}"+'/'+id;
                var _this= $(this);
                $.ajax({
                    type:'get',
@@ -225,7 +225,7 @@
                        nilai +='<input type="hidden" class="form-control form-control-sm" name="nama[]" value="'+data.data.id+'"></input>';
                        nilai +='</td>';
                        nilai +='<td class="harga" style="height:40px;">';
-                       nilai +='<input type="number" class="form-control form-control-sm" name="harga_jual[]" value="'+data.data.harga_jual+'" style="width: auto;"></input>';
+                       nilai +='<input type="number" class="form-control form-control-sm" name="harga_beli[]" value="'+data.data.harga_beli+'" style="width: auto;"></input>';
                        nilai +='</td>';
                        nilai +='<td hidden style="height:40px;">';
                        nilai +='<input type="number" class="form-control form-control-sm" name="stok[]" value="'+data.data.stok+'" style="width: auto;"></input>';
@@ -247,7 +247,7 @@
        e.preventDefault();
        $(this).closest('tr').remove();
    })
-   $("#logistikkeluar").select2({
+   $("#logistikmasuk").select2({
        placeholder: "Cari Logistik",
        allowClear: true
    });
@@ -257,7 +257,7 @@
             // console.log($(this).data('id'))
             let id = $(this).data('id')
             $.ajax({
-                url: `/${id}/detail-logkeluar`,
+                url: `/${id}/detail-logmasuk`,
                 method: "GET",
                 success: function(data) {
                     // console.log(data)
