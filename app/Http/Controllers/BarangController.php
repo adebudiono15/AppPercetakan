@@ -17,8 +17,8 @@ class BarangController extends Controller
         $firstInvoiceID = Barang::count('id');
         $secondInvoiceID = $firstInvoiceID + 1;
         $nomor = sprintf("%05d", $secondInvoiceID);
-        $kode = "BDP$nomor";
-        return view('admin.master.barang.index', compact('barang', 'kode','kategori'));
+        $kode = "BMP1$nomor";
+        return view('master.barang.index', compact('barang', 'kode','kategori'));
     }
 
     public function store(Request $request)
